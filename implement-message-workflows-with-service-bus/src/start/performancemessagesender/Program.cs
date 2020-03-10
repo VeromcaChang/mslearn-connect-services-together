@@ -26,11 +26,16 @@ namespace performancemessagesender
         static async Task SendPerformanceMessageAsync()
         {
             // Create a Topic Client here
+            topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
 
             // Send messages.
             try
             {
                 // Create and send a message here
+                string messageBody = $"Total sales for Brazil in August: $13m.";
+                var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+                Console.WriteLine($"Sending message: {messageBody}");
+                await topicClient.SendAsync(message);
             }
             catch (Exception exception)
             {
@@ -38,6 +43,7 @@ namespace performancemessagesender
             }
 
             // Close the connection to the topic here
+            await topicClient.CloseAsync();
         }
     }
 }
